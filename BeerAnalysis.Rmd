@@ -1,0 +1,38 @@
+---
+title: "Beer Analysis"
+author: "Abahay Sharma and Derek Rogers"
+date: "2022-10-07"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+BeerDataFrame = data.frame(read.csv("C:/SMU MS Data Science/DoingDataScience6306/MSDS_6306_Doing-Data-Science/Unit 8 and 9 Case Study 1/Beers.csv"))
+BreweriesDataFrame = data.frame(read.csv("C:/SMU MS Data Science/DoingDataScience6306/MSDS_6306_Doing-Data-Science/Unit 8 and 9 Case Study 1/Breweries.csv"))
+
+BeerDataFrame
+BreweriesDataFrame
+```
+
+```{r}
+
+```
+
+```{r}
+
+```
+
+```{r}
+
+```
+
+```{r}
+
+```
+
+```{r}
+
+```
