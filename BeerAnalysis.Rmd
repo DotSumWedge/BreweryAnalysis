@@ -18,11 +18,43 @@ BreweriesDataFrame
 ```
 
 ```{r}
+# Get the number of breweries in each state
+library(ggthemes)
+library(plotly)
 
+# create histogram of the number of players at a given position
+NumberOfBreweriesInEachStateHistogram <- ggplot(data = BreweriesDataFrame, aes(x=State)) + 
+  geom_bar(stat = "count") + 
+  labs(subtitle="Number of Breweries in each State", 
+       y="Count", 
+       x="State", 
+       title="Histogram") +
+  theme_wsj()
+
+ggplotly(NumberOfBreweriesInEachStateHistogram)
 ```
 
 ```{r}
+# Show a map of the US to show how many breweries are in each state
+library(usmap)
+library(ggplot2)
 
+
+plot_usmap(regions = "states") + labs(title = "U.S States")
+```
+
+```{r}
+# Show a map of the US to show how many breweries are in each state
+library(plotly)
+
+g = list(scope = 'usa')
+
+fig = plot_geo(BreweriesDataFrame, locationmode = 'USA-states') %>%
+  add_trace(
+    colors = 'purples'
+  ) %>%
+  colorbar(title = "Number of breweries in each state") %>%
+  layout(geo = g)
 ```
 
 ```{r}
