@@ -128,5 +128,14 @@ summary(mergedBeerData %>% filter(!is.na(ABV)))
 
 ```{r}
 # Distribution of the ABV variable
+mergedBeerData %>% filter(!is.na(ABV))
 
+barPlotABV <- ggplot(data = mergedBeerData %>% filter(!is.na(ABV)), aes(x=ABV)) +
+  geom_bar(stat = "count") + 
+  labs(subtitle="Distribution of ABV", 
+       y="Count", 
+       x="ABV", 
+       title="Distribution of ABV")
+
+ggplotly(barPlotABV)
 ```
