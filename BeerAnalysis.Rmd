@@ -14,6 +14,7 @@ library(tidyverse)
 library(dplyr)
 library(ggthemes)
 library(plotly)
+library(ggExtra)
 ```
 
 ```{r}
@@ -60,10 +61,9 @@ mergedBeerData[which.max(mergedBeerData$IBU),]
 
 NumberOfBreweriesInEachStateHistogram = ggplot(data = BreweriesData, aes(x=State)) + 
   geom_bar(stat = "count") + 
-  labs(subtitle="Number of Breweries in each State", 
+  labs(title="Number of Breweries in each State", 
        y="Count", 
-       x="State", 
-       title="Number of breweries in each state") +
+       x="State") +
   theme(axis.text.x = element_text(size = rel(0.8), angle = 90))
 
 ggplotly(NumberOfBreweriesInEachStateHistogram)
@@ -104,18 +104,16 @@ stateMedianIBU
 stateMedianABVBarPlot = ggplot(data = stateMedianABV, aes(x = State, y = Median)) +
   geom_bar(stat = "identity") +
   theme(axis.text.x = element_text(size = rel(0.8), angle = 90)) +
-  labs(subtitle="Median ABV by State", 
+  labs(title="Median ABV by State", 
      y="Median ABV", 
-     x="State", 
-     title="Median ABV by State")
+     x="State")
 
 stateMedianIBUBarPlot = ggplot(data = stateMedianIBU, aes(x = State, y = Median)) +
   geom_bar(stat = "identity") +
   theme(axis.text.x = element_text(size = rel(0.8), angle = 90)) +
-  labs(subtitle="Median IBU by State", 
+  labs(title="Median IBU by State", 
      y="Median IBU", 
-     x="State", 
-     title="Median IBU by State")
+     x="State")
 
 ggplotly(stateMedianABVBarPlot)
 ggplotly(stateMedianIBUBarPlot)
@@ -128,14 +126,31 @@ summary(mergedBeerData %>% filter(!is.na(ABV)))
 
 ```{r}
 # Distribution of the ABV variable
-mergedBeerData %>% filter(!is.na(ABV))
-
 barPlotABV <- ggplot(data = mergedBeerData %>% filter(!is.na(ABV)), aes(x=ABV)) +
   geom_bar(stat = "count") + 
-  labs(subtitle="Distribution of ABV", 
+  labs(title="Distribution of ABV", 
        y="Count", 
-       x="ABV", 
-       title="Distribution of ABV")
+       x="ABV")
 
 ggplotly(barPlotABV)
+```
+
+
+```{r}
+# Scatter plot between IBU and ABV
+mergedBeerData %>% filter(!is.na(ABV) & !is.na(IBU))
+
+
+scatterPlotIBUvsABV = ggplot(data = mergedBeerData %>% filter(!is.na(ABV) & !is.na(IBU)), aes(x=ABV, y=IBU)) + 
+  geom_point(position = "jitter") + 
+  geom_smooth(method = "loess", se = F) + 
+  labs(title = "Relationship between ABV and IBU", 
+       y = "IBU", 
+       x = "ABV")
+
+plot(scatterPlotIBUvsABV)
+ggplotly(scatterPlotIBUvsABV)
+ggMarginal(scatterPlotIBUvsABV, type = "histogram")
+ggMarginal(scatterPlotIBUvsABV, type = "boxplot")
+ggMarginal(scatterPlotIBUvsABV)
 ```
