@@ -37,7 +37,9 @@ BeerDataFrame[BeerDataFrame$Name == "Lee Hill Series Vol. 5 - Belgian Style Quad
 # Merge beer data with breweries data
 names(BreweriesDataFrame)[1] = "Brewery_id"
 mergedBeerData = merge(BeerDataFrame, BreweriesDataFrame, by = "Brewery_id")
-mergedBeerData
+
+head(mergedBeerData, 6)
+tail(mergedBeerData, 6)
 ```
 
 ```{r}
