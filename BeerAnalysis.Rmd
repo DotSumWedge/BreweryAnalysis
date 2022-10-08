@@ -17,15 +17,15 @@ library(plotly)
 ```
 
 ```{r}
-BeerDataFrame = data.frame(read.csv("C:/SMU MS Data Science/DoingDataScience6306/MSDS_6306_Doing-Data-Science/Unit 8 and 9 Case Study 1/Beers.csv"))
-BreweriesDataFrame = data.frame(read.csv("C:/SMU MS Data Science/DoingDataScience6306/MSDS_6306_Doing-Data-Science/Unit 8 and 9 Case Study 1/Breweries.csv"))
+BeerData = data.frame(read.csv("C:/SMU MS Data Science/DoingDataScience6306/MSDS_6306_Doing-Data-Science/Unit 8 and 9 Case Study 1/Beers.csv"))
+BreweriesData = data.frame(read.csv("C:/SMU MS Data Science/DoingDataScience6306/MSDS_6306_Doing-Data-Science/Unit 8 and 9 Case Study 1/Breweries.csv"))
 
-BeerDataFrame
-BreweriesDataFrame
+BeerData
+BreweriesData
 ```
 ```{r}
-# Manually add in missing data for beers of intrest
-BeerDataFrame[BeerDataFrame$Name == "Lee Hill Series Vol. 5 - Belgian Style Quadrupel Ale",]$IBU = 35
+# Manually add in missing data for beers of interest
+BeerData[BeerData$Name == "Lee Hill Series Vol. 5 - Belgian Style Quadrupel Ale",]$IBU = 35
 ```
 
 ```{r}
@@ -35,8 +35,8 @@ BeerDataFrame[BeerDataFrame$Name == "Lee Hill Series Vol. 5 - Belgian Style Quad
 
 ```{r}
 # Merge beer data with breweries data
-names(BreweriesDataFrame)[1] = "Brewery_id"
-mergedBeerData = merge(BeerDataFrame, BreweriesDataFrame, by = "Brewery_id")
+names(BreweriesData)[1] = "Brewery_id"
+mergedBeerData = merge(BeerData, BreweriesData, by = "Brewery_id")
 
 head(mergedBeerData, 6)
 tail(mergedBeerData, 6)
@@ -58,13 +58,12 @@ mergedBeerData[which.max(mergedBeerData$IBU),]
 # create histogram of the number of players at a given position
 
 
-NumberOfBreweriesInEachStateHistogram = ggplot(data = BreweriesDataFrame, aes(x=State)) + 
+NumberOfBreweriesInEachStateHistogram = ggplot(data = BreweriesData, aes(x=State)) + 
   geom_bar(stat = "count") + 
   labs(subtitle="Number of Breweries in each State", 
        y="Count", 
        x="State", 
        title="Number of breweries in each state") +
-  theme_wsj() +
   theme(axis.text.x = element_text(size = rel(0.8), angle = 90))
 
 ggplotly(NumberOfBreweriesInEachStateHistogram)
@@ -85,7 +84,7 @@ library(plotly)
 
 g = list(scope = 'usa')
 
-fig = plot_geo(BreweriesDataFrame, locationmode = 'USA-states') %>%
+fig = plot_geo(BreweriesData, locationmode = 'USA-states') %>%
   add_trace(
     colors = 'purples'
   ) %>%
@@ -96,8 +95,30 @@ fig = plot_geo(BreweriesDataFrame, locationmode = 'USA-states') %>%
 ```{r}
 # Compute the median alcohol content and international bitterness unit for each state then plot with a bar chart
 
-mergedBeerData %>% filter(!is.na(ABV)) %>% group_by(State) %>% summarise(Median = median(ABV)) %>% arrange(desc(Median))
-mergedBeerData %>% filter(!is.na(IBU)) %>% group_by(State) %>% summarise(Median = median(IBU)) %>% arrange(desc(Median))
+stateMedianABV = mergedBeerData %>% filter(!is.na(ABV)) %>% group_by(State) %>% summarise(Median = median(ABV)) %>% arrange(desc(Median))
+stateMedianIBU = mergedBeerData %>% filter(!is.na(IBU)) %>% group_by(State) %>% summarise(Median = median(IBU)) %>% arrange(desc(Median))
+
+stateMedianABV
+stateMedianIBU
+
+stateMedianABVBarPlot = ggplot(data = stateMedianABV, aes(x = State, y = Median)) +
+  geom_bar(stat = "identity") +
+  theme(axis.text.x = element_text(size = rel(0.8), angle = 90)) +
+  labs(subtitle="Median ABV by State", 
+     y="Median ABV", 
+     x="State", 
+     title="Median ABV by State")
+
+stateMedianIBUBarPlot = ggplot(data = stateMedianIBU, aes(x = State, y = Median)) +
+  geom_bar(stat = "identity") +
+  theme(axis.text.x = element_text(size = rel(0.8), angle = 90)) +
+  labs(subtitle="Median IBU by State", 
+     y="Median IBU", 
+     x="State", 
+     title="Median IBU by State")
+
+ggplotly(stateMedianABVBarPlot)
+ggplotly(stateMedianIBUBarPlot)
 ```
 
 ```{r}
