@@ -32,6 +32,12 @@ mergedBeerData
 ```
 
 ```{r}
+# Find the beer with the largest ABV and IBU and return those rows
+max(mergedBeerData$ABV, na.rm = TRUE)
+max(mergedBeerData$IBU, na.rm = TRUE)
+```
+
+```{r}
 # create histogram of the number of players at a given position
 
 
@@ -47,7 +53,7 @@ ggplotly(NumberOfBreweriesInEachStateHistogram)
 ```
 
 ```{r}
-# Show a map of the US to show how many breweries are in each state
+# Show a map of the US to show how many breweries are in each state with usmap and ggplot2
 library(usmap)
 library(ggplot2)
 
@@ -56,7 +62,7 @@ plot_usmap(regions = "states") + labs(title = "U.S States")
 ```
 
 ```{r}
-# Show a map of the US to show how many breweries are in each state
+# Show a map of the US to show how many breweries are in each state with plotly
 library(plotly)
 
 g = list(scope = 'usa')
