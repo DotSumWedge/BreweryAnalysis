@@ -94,7 +94,10 @@ fig = plot_geo(BreweriesDataFrame, locationmode = 'USA-states') %>%
 ```
 
 ```{r}
+# Compute the median alcohol content and international bitterness unit for each state then plot with a bar chart
 
+mergedBeerData %>% filter(!is.na(ABV)) %>% group_by(State) %>% summarise(Median = median(ABV)) %>% arrange(desc(Median))
+mergedBeerData %>% filter(!is.na(IBU)) %>% group_by(State) %>% summarise(Median = median(IBU)) %>% arrange(desc(Median))
 ```
 
 ```{r}
