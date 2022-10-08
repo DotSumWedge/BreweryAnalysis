@@ -32,9 +32,15 @@ mergedBeerData
 ```
 
 ```{r}
-# Find the beer with the largest ABV and IBU and return those rows
+# Find the beer with the largest ABV and IBU and return those row
+
+"Highest ABV:"
 max(mergedBeerData$ABV, na.rm = TRUE)
+"Highest IBU:"
 max(mergedBeerData$IBU, na.rm = TRUE)
+
+mergedBeerData[which.max(mergedBeerData$ABV),]
+mergedBeerData[which.max(mergedBeerData$IBU),]
 ```
 
 ```{r}
