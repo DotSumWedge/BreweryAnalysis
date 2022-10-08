@@ -10,6 +10,13 @@ knitr::opts_chunk$set(echo = TRUE)
 ```
 
 ```{r}
+library(tidyverse)
+library(dplyr)
+library(ggthemes)
+library(plotly)
+```
+
+```{r}
 BeerDataFrame = data.frame(read.csv("C:/SMU MS Data Science/DoingDataScience6306/MSDS_6306_Doing-Data-Science/Unit 8 and 9 Case Study 1/Beers.csv"))
 BreweriesDataFrame = data.frame(read.csv("C:/SMU MS Data Science/DoingDataScience6306/MSDS_6306_Doing-Data-Science/Unit 8 and 9 Case Study 1/Breweries.csv"))
 
@@ -18,17 +25,22 @@ BreweriesDataFrame
 ```
 
 ```{r}
-# Get the number of breweries in each state
-library(ggthemes)
-library(plotly)
+# Merge beer data with breweries data
+names(BreweriesDataFrame)[1] = "Brewery_id"
+mergedBeerData = merge(BeerDataFrame, BreweriesDataFrame, by = "Brewery_id")
+mergedBeerData
+```
 
+```{r}
 # create histogram of the number of players at a given position
-NumberOfBreweriesInEachStateHistogram <- ggplot(data = BreweriesDataFrame, aes(x=State)) + 
+
+
+NumberOfBreweriesInEachStateHistogram = ggplot(data = BreweriesDataFrame, aes(x=State)) + 
   geom_bar(stat = "count") + 
   labs(subtitle="Number of Breweries in each State", 
        y="Count", 
        x="State", 
-       title="Histogram") +
+       title="Number of breweries in each state") +
   theme_wsj()
 
 ggplotly(NumberOfBreweriesInEachStateHistogram)
