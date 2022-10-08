@@ -23,6 +23,15 @@ BreweriesDataFrame = data.frame(read.csv("C:/SMU MS Data Science/DoingDataScienc
 BeerDataFrame
 BreweriesDataFrame
 ```
+```{r}
+# Manually add in missing data for beers of intrest
+BeerDataFrame[BeerDataFrame$Name == "Lee Hill Series Vol. 5 - Belgian Style Quadrupel Ale",]$IBU = 35
+```
+
+```{r}
+# Tidy data
+```
+
 
 ```{r}
 # Merge beer data with breweries data
@@ -53,7 +62,8 @@ NumberOfBreweriesInEachStateHistogram = ggplot(data = BreweriesDataFrame, aes(x=
        y="Count", 
        x="State", 
        title="Number of breweries in each state") +
-  theme_wsj()
+  theme_wsj() +
+  theme(axis.text.x = element_text(size = rel(0.8), angle = 90))
 
 ggplotly(NumberOfBreweriesInEachStateHistogram)
 ```
