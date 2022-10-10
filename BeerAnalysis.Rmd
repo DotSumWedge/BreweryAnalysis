@@ -11,6 +11,9 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ```{r}
 library(tidyverse)
+library(class)
+library(caret)
+library(e1071)
 library(dplyr)
 library(ggthemes)
 library(plotly)
@@ -30,6 +33,7 @@ BreweriesData
 
 #Set state as a factor
 BreweriesData$State = as.factor(BreweriesData$State)
+BeerData$Style = as.factor(BeerData$Style)
 
 # Remove (year) at the end of the names of beers
 BeerData$Name = str_remove(BeerData$Name, "([:space:]|)\\(\\d\\d\\d\\d\\)")
@@ -181,4 +185,26 @@ ggplotly(scatterPlotIBUvsABV)
 ggMarginal(scatterPlotIBUvsABV, type = "histogram")
 ggMarginal(scatterPlotIBUvsABV, type = "boxplot")
 ggMarginal(scatterPlotIBUvsABV)
+```
+
+```{r}
+# Model relationship between ABV and IBU with knn
+AbvIbuBeer = mergedBeerData %>% filter(!is.na(ABV) & !is.na(IBU)) %>% filter(Style == "American IPA" | Style == "American Pale Ale (APA)")
+AbvIbuBeer$Style = droplevels(AbvIbuBeer$Style)
+
+maxKvalue = 100
+accuracyVector = c(maxKvalue)
+
+for(i in 1:maxKvalue){
+  classifications = knn.cv(AbvIbuBeer[,c(4,5)], AbvIbuBeer$Style, k=i, prob = TRUE)
+  accuracyVector[i] = confusionMatrix(table(classifications, AbvIbuBeer$Style))$overall[1]
+}
+
+higestAccuracyKValue = which.max(accuracyVector)
+
+higestAccuracyKValue
+accuracyVector
+
+plot(seq(1, maxKvalue, 1), accuracyVector, type = "l", xlab = "K value", ylab = "accuracy", main = "accuracy for k values")
+
 ```
