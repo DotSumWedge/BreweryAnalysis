@@ -148,6 +148,18 @@ summary(mergedBeerData %>% filter(!is.na(ABV)))
 ```
 
 ```{r}
+# Boxplot of ABV
+scatterPlotABV = ggplot(data = mergedBeerData %>% filter(!is.na(ABV)), aes(x=ABV)) + 
+  geom_boxplot() +
+  ylim(-1,1) +
+  labs(title = "ABV Distrobution", x = "ABV") +
+  theme(axis.text.y = element_blank(), axis.ticks.y = element_blank())
+
+plot(scatterPlotABV)
+ggplotly(scatterPlotABV)
+```
+
+```{r}
 # Distribution of the ABV variable
 barPlotABV <- ggplot(data = mergedBeerData %>% filter(!is.na(ABV)), aes(x=ABV)) +
   geom_bar(stat = "count") + 
@@ -161,10 +173,6 @@ ggplotly(barPlotABV)
 
 ```{r}
 # Scatter plot between IBU and ABV
-mergedBeerData
-mergedBeerData %>% filter(!is.na(ABV) & !is.na(IBU))
-
-
 scatterPlotIBUvsABV = ggplot(data = mergedBeerData %>% filter(!is.na(ABV) & !is.na(IBU)), aes(x=ABV, y=IBU)) + 
   geom_point(position = "jitter") + 
   geom_smooth(method = "loess", se = F) + 
