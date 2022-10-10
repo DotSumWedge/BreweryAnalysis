@@ -24,11 +24,6 @@ BreweriesData = data.frame(read.csv("C:/SMU MS Data Science/DoingDataScience6306
 BeerData
 BreweriesData
 ```
-```{r}
-# Manually add in missing data for beers of interest
-BeerData[BeerData$Name == "Lee Hill Series Vol. 5 - Belgian Style Quadrupel Ale",]$IBU = 35
-BeerData[BeerData$Name == "Lee Hill Series Vol. 5 - Belgian Style Quadrupel Ale",]
-```
 
 ```{r}
 # Tidy data
@@ -50,22 +45,12 @@ BeerData = BeerData %>% group_by(Name) %>% filter(!duplicated(Name))
 
 BeerData
 ```
-
 ```{r}
-# Tidy data
-
-exampleSpace = "beer 1 (2015)"
-exampleNoSpace = "beer 1(2015)"
-exampleSpaceOz = "beer 1 (12oz)"
-exampleNoSpaceOz = "beer 1(12 oz)"
-
-
-str_remove(exampleSpace, "([:space:]|)\\(\\d\\d\\d\\d\\)")
-str_remove(exampleNoSpace, "([:space:]|)\\(\\d\\d\\d\\d\\)")
-str_remove(exampleSpaceOz, "([:space:]|)\\(\\d\\d\\d\\d\\)")
-str_remove(exampleNoSpaceOz, "([:space:]|)\\(\\d\\d\\d\\d\\)")
+# Manually add in missing data for beers
+BeerData[BeerData$Name == "Lee Hill Series Vol. 5 - Belgian Style Quadrupel Ale",]$IBU = 35
+BeerData[BeerData$Name == "Pub Beer",]$IBU = 18
+BeerData[BeerData$Name == "Sinister",]$IBU = 30
 ```
-
 
 ```{r}
 # Merge beer data with breweries data
