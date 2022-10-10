@@ -27,10 +27,34 @@ BreweriesData
 ```{r}
 # Manually add in missing data for beers of interest
 BeerData[BeerData$Name == "Lee Hill Series Vol. 5 - Belgian Style Quadrupel Ale",]$IBU = 35
+BeerData[BeerData$Name == "Lee Hill Series Vol. 5 - Belgian Style Quadrupel Ale",]
 ```
 
 ```{r}
 # Tidy data
+
+BreweriesData$State = as.factor(BreweriesData$State)
+
+exampleSpace = "beer 1 (2015)"
+exampleNoSpace = "beer 1(2015)"
+
+str_remove(exampleSpace, "[:space:]\\([:digit:]*.")
+str_remove(exampleNoSpace, "\\([:digit:]*.")
+```
+
+```{r}
+# Tidy data
+
+exampleSpace = "beer 1 (2015)"
+exampleNoSpace = "beer 1(2015)"
+exampleSpaceOz = "beer 1 (12oz)"
+exampleNoSpaceOz = "beer 1(12 oz)"
+
+
+str_remove(exampleSpace, "([:space:]|)\\(\\d\\d\\d\\d\\)")
+str_remove(exampleNoSpace, "([:space:]|)\\(\\d\\d\\d\\d\\)")
+str_remove(exampleSpaceOz, "([:space:]|)\\(\\d\\d\\d\\d\\)")
+str_remove(exampleNoSpaceOz, "([:space:]|)\\(\\d\\d\\d\\d\\)")
 ```
 
 
@@ -56,10 +80,9 @@ mergedBeerData[which.max(mergedBeerData$IBU),]
 ```
 
 ```{r}
-# create histogram of the number of players at a given position
+# create histogram of the number of breweries in each state
 
-
-NumberOfBreweriesInEachStateHistogram = ggplot(data = BreweriesData, aes(x=State)) + 
+NumberOfBreweriesInEachStateHistogram = ggplot(data = BreweriesData , aes(x=fct_infreq(State))) + 
   geom_bar(stat = "count") + 
   labs(title="Number of Breweries in each State", 
        y="Count", 
@@ -101,14 +124,14 @@ stateMedianIBU = mergedBeerData %>% filter(!is.na(IBU)) %>% group_by(State) %>% 
 stateMedianABV
 stateMedianIBU
 
-stateMedianABVBarPlot = ggplot(data = stateMedianABV, aes(x = State, y = Median)) +
+stateMedianABVBarPlot = ggplot(data = stateMedianABV, aes(x = reorder(State, -Median), y = Median)) +
   geom_bar(stat = "identity") +
   theme(axis.text.x = element_text(size = rel(0.8), angle = 90)) +
   labs(title="Median ABV by State", 
      y="Median ABV", 
      x="State")
 
-stateMedianIBUBarPlot = ggplot(data = stateMedianIBU, aes(x = State, y = Median)) +
+stateMedianIBUBarPlot = ggplot(data = stateMedianIBU, aes(x = reorder(State, -Median), y = Median)) +
   geom_bar(stat = "identity") +
   theme(axis.text.x = element_text(size = rel(0.8), angle = 90)) +
   labs(title="Median IBU by State", 
@@ -138,6 +161,7 @@ ggplotly(barPlotABV)
 
 ```{r}
 # Scatter plot between IBU and ABV
+mergedBeerData
 mergedBeerData %>% filter(!is.na(ABV) & !is.na(IBU))
 
 
