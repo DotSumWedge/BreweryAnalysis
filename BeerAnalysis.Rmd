@@ -47,6 +47,7 @@ BeerData
 ```
 ```{r}
 # Manually add in missing data for beers
+# After googling various beers without IBU's and looking for the missing value it seems like many are hard to find 
 BeerData[BeerData$Name == "Lee Hill Series Vol. 5 - Belgian Style Quadrupel Ale",]$IBU = 35
 BeerData[BeerData$Name == "Pub Beer",]$IBU = 18
 BeerData[BeerData$Name == "Sinister",]$IBU = 30
