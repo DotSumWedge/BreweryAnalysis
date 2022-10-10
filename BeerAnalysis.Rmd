@@ -189,8 +189,17 @@ ggMarginal(scatterPlotIBUvsABV)
 
 ```{r}
 # Model relationship between ABV and IBU with knn
-AbvIbuBeer = mergedBeerData %>% filter(!is.na(ABV) & !is.na(IBU)) %>% filter(Style == "American IPA" | Style == "American Pale Ale (APA)")
+
+# Only keep beers with an ABV and an IBU
+AbvIbuBeer = mergedBeerData %>% filter(!is.na(ABV) & !is.na(IBU))
+# Change any beer style that contains the word 'Ale' to 'other' except for 'American IPA'
+AbvIbuBeer$Style[AbvIbuBeer$Style != "American IPA" & grepl("Ale", AbvIbuBeer$Style, fixed = TRUE)] = "Other"
+# Only keep beers with style 'American IPA' or 'Other'
+AbvIbuBeer = AbvIbuBeer %>% filter(Style == "American IPA" | Style == "Other")
+# Drop all levels except for 'American IPA' and 'Other'
 AbvIbuBeer$Style = droplevels(AbvIbuBeer$Style)
+
+AbvIbuBeer
 
 maxKvalue = 100
 accuracyVector = c(maxKvalue)
