@@ -137,7 +137,7 @@ ggplot(map_data1, aes(map_id = State)) +
   expand_limits(x = states_map$long, y = states_map$lat) +
   labs(title = "Count of Breweries in the US")+ 
   ggthemes::theme_map() +
-  scale_fill_gradient(low = "black", high = "orange")
+  scico::scale_fill_scico(palette = "lajolla")
 
 ```
 
