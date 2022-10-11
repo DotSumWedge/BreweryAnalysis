@@ -1,6 +1,6 @@
 ---
 title: "Beer Analysis"
-author: "Abahay Sharma and Derek Rogers"
+author: "Abhay Sharma and Derek Rogers"
 date: "2022-10-07"
 output: html_document
 ---
@@ -21,8 +21,8 @@ library(ggExtra)
 ```
 
 ```{r}
-BeerData = data.frame(read.csv("C:/SMU MS Data Science/DoingDataScience6306/MSDS_6306_Doing-Data-Science/Unit 8 and 9 Case Study 1/Beers.csv"))
-BreweriesData = data.frame(read.csv("C:/SMU MS Data Science/DoingDataScience6306/MSDS_6306_Doing-Data-Science/Unit 8 and 9 Case Study 1/Breweries.csv"))
+BeerData = data.frame(read.csv("~/SMU/Term 1/Doing Data Science/MSDS_6306_Doing-Data-Science-Master/Unit 8 and 9 Case Study 1/Beers.csv"))
+BreweriesData = data.frame(read.csv("~/SMU/Term 1/Doing Data Science/MSDS_6306_Doing-Data-Science-Master/Unit 8 and 9 Case Study 1/Breweries.csv"))
 
 BeerData
 BreweriesData
@@ -82,14 +82,13 @@ mergedBeerData[which.max(mergedBeerData$IBU),]
 ```{r}
 # create histogram of the number of breweries in each state
 
-NumberOfBreweriesInEachStateHistogram = ggplot(data = BreweriesData , aes(x=fct_infreq(State))) + 
+BreweriesData %>% ggplot(aes(x=fct_infreq(State))) + 
   geom_bar(stat = "count") + 
   labs(title="Number of Breweries in each State", 
        y="Count", 
        x="State") +
   theme(axis.text.x = element_text(size = rel(0.8), angle = 90))
 
-ggplotly(NumberOfBreweriesInEachStateHistogram)
 ```
 
 ```{r}
