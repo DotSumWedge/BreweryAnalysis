@@ -49,12 +49,19 @@ BeerData = BeerData %>% group_by(Name) %>% filter(!duplicated(Name))
 
 BeerData
 ```
+
+
+
 ```{r}
+library(naniar)
+
 # Manually add in missing data for beers
 # After googling various beers without IBU's and looking for the missing value it seems like many are hard to find 
 BeerData[BeerData$Name == "Lee Hill Series Vol. 5 - Belgian Style Quadrupel Ale",]$IBU = 35
 BeerData[BeerData$Name == "Pub Beer",]$IBU = 18
 BeerData[BeerData$Name == "Sinister",]$IBU = 30
+
+#gg_miss_var(BeerData) Did not work as intended, might use to visualize missing values, might not be necessary
 ```
 
 ```{r}
@@ -127,7 +134,8 @@ ggplot(map_data1, aes(map_id = State)) +
   geom_map(aes(fill = n), map = states_map) +
   expand_limits(x = states_map$long, y = states_map$lat) +
   labs(title = "Count of Breweries in the US")+ 
-  ggthemes::theme_map()
+  ggthemes::theme_map() +
+  scale_fill_gradient(low = "black", high = "orange")
 
 ```
 
@@ -187,7 +195,7 @@ ggplotly(barPlotABV)
 
 ```{r}
 # Scatter plot between IBU and ABV
-scatterPlotIBUvsABV = ggplot(data = mergedBeerData %>% filter(!is.na(ABV) & !is.na(IBU)), aes(x=ABV, y=IBU)) + 
+mergedBeerData %>% filter(!is.na(ABV) & !is.na(IBU)) %>% ggplot(aes(x=ABV, y=IBU)) + 
   geom_point(position = "jitter") + 
   geom_smooth(method = "loess", se = F) + 
   labs(title = "Relationship between ABV and IBU", 
@@ -195,14 +203,17 @@ scatterPlotIBUvsABV = ggplot(data = mergedBeerData %>% filter(!is.na(ABV) & !is.
        x = "ABV")
 
 plot(scatterPlotIBUvsABV)
-ggplotly(scatterPlotIBUvsABV)
+#ggplotly(scatterPlotIBUvsABV)
 ggMarginal(scatterPlotIBUvsABV, type = "histogram")
 ggMarginal(scatterPlotIBUvsABV, type = "boxplot")
 ggMarginal(scatterPlotIBUvsABV)
 ```
 
+
+
 ```{r}
 # Model relationship between ABV and IBU with knn
+
 
 # Only keep beers with an ABV and an IBU
 AbvIbuBeer = mergedBeerData %>% filter(!is.na(ABV) & !is.na(IBU))
