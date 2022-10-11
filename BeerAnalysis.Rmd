@@ -112,6 +112,21 @@ fig = plot_geo(BreweriesData, locationmode = 'USA-states') %>%
   ) %>%
   colorbar(title = "Number of breweries in each state") %>%
   layout(geo = g)
+
+
+# Creates a map of the US to show count of how many breweries are in each state;
+
+map_data1 = BreweriesData %>% count(State)
+map_data1$State = state.name[match(str_squish(map_data1$State), state.abb)]
+map_data1$State = tolower(map_data1$State)
+
+
+ggplot(map_data1, aes(map_id = State)) +
+  geom_map(aes(fill = n), map = states_map) +
+  expand_limits(x = states_map$long, y = states_map$lat) +
+  labs(title = "Count of Breweries in the US")+ 
+  ggthemes::theme_map()
+
 ```
 
 ```{r}
@@ -123,22 +138,20 @@ stateMedianIBU = mergedBeerData %>% filter(!is.na(IBU)) %>% group_by(State) %>% 
 stateMedianABV
 stateMedianIBU
 
-stateMedianABVBarPlot = ggplot(data = stateMedianABV, aes(x = reorder(State, -Median), y = Median)) +
+stateMedianABV %>% ggplot(aes(x = reorder(State, -Median), y = Median)) +
   geom_bar(stat = "identity") +
   theme(axis.text.x = element_text(size = rel(0.8), angle = 90)) +
   labs(title="Median ABV by State", 
      y="Median ABV", 
      x="State")
 
-stateMedianIBUBarPlot = ggplot(data = stateMedianIBU, aes(x = reorder(State, -Median), y = Median)) +
+stateMedianIBU %>% ggplot(aes(x = reorder(State, -Median), y = Median)) +
   geom_bar(stat = "identity") +
   theme(axis.text.x = element_text(size = rel(0.8), angle = 90)) +
   labs(title="Median IBU by State", 
      y="Median IBU", 
      x="State")
 
-ggplotly(stateMedianABVBarPlot)
-ggplotly(stateMedianIBUBarPlot)
 ```
 
 ```{r}
