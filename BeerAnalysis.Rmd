@@ -18,6 +18,8 @@ library(dplyr)
 library(ggthemes)
 library(plotly)
 library(ggExtra)
+library(scales)
+library(scico)
 ```
 
 ```{r}
@@ -145,22 +147,32 @@ ggplot(map_data1, aes(map_id = State)) +
 stateMedianABV = mergedBeerData %>% filter(!is.na(ABV)) %>% group_by(State) %>% summarise(Median = median(ABV)) %>% arrange(desc(Median))
 stateMedianIBU = mergedBeerData %>% filter(!is.na(IBU)) %>% group_by(State) %>% summarise(Median = median(IBU)) %>% arrange(desc(Median))
 
+stateNumberOfBeersABV = mergedBeerData %>% filter(!is.na(ABV)) %>% group_by(State) %>% tally()
+stateNumberOfBeersIBU = mergedBeerData %>% filter(!is.na(IBU)) %>% group_by(State) %>% tally()
+
+stateMedianABV = merge(stateMedianABV, stateNumberOfBeersABV, by = "State")
+stateMedianIBU = merge(stateMedianIBU, stateNumberOfBeersIBU, by = "State")
+
 stateMedianABV
 stateMedianIBU
 
 stateMedianABV %>% ggplot(aes(x = reorder(State, -Median), y = Median)) +
-  geom_bar(stat = "identity") +
+  geom_bar(stat = "identity", aes(fill = n)) +
+  scico::scale_fill_scico(palette = "lajolla") +
   theme(axis.text.x = element_text(size = rel(0.8), angle = 90)) +
   labs(title="Median ABV by State", 
      y="Median ABV", 
-     x="State")
+     x="State",
+     fill = "# Beers")
 
 stateMedianIBU %>% ggplot(aes(x = reorder(State, -Median), y = Median)) +
-  geom_bar(stat = "identity") +
+  geom_bar(stat = "identity", aes(fill = n)) +
+  scico::scale_fill_scico(palette = "lajolla") +
   theme(axis.text.x = element_text(size = rel(0.8), angle = 90)) +
   labs(title="Median IBU by State", 
      y="Median IBU", 
-     x="State")
+     x="State", 
+     fill = "# Beers")
 
 ```
 
