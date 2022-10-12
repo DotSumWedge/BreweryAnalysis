@@ -20,6 +20,7 @@ library(plotly)
 library(ggExtra)
 library(scales)
 library(scico)
+library(stringr)
 ```
 
 ```{r}
@@ -225,20 +226,44 @@ ggMarginal(scatterPlotIBUvsABV)
 
 
 ```{r}
-# Model relationship between ABV and IBU with knn
+# Get list of all unique styles of beers and the number of beers of each style
 
+# Only keep beers with a Style, ABV and IBU
+uniqueStyles = mergedBeerData %>% filter(!is.na(Style))
 
-# Only keep beers with an ABV and an IBU
-AbvIbuBeer = mergedBeerData %>% filter(!is.na(ABV) & !is.na(IBU))
+# Create dataframe that contains every unique style and how many beers have that style
+uniqueStyles = uniqueStyles %>% group_by(Style) %>% tally()
+
+uniqueStyles
+```
+
+```{r}
+# Prepare data for knn modeling to predict style based off of ABV and IBU
+
+# Only keep beers with a Style, ABV and IBU
+AbvIbuBeer = mergedBeerData %>% filter(!is.na(ABV) & !is.na(IBU) & !is.na(Style))
+# Keep only beers with a style containing string "IPA" or "Ale"
+AbvIbuBeer = AbvIbuBeer[str_detect(AbvIbuBeer$Style, "IPA|Ale"),]
+# If a syle doesn't contain the "IPA" but does contain "Ale" then change style to "Other"
+AbvIbuBeer$Style[AbvIbuBeer$Style != grepl("IPA", AbvIbuBeer$Style, fixed = TRUE) & grepl("Ale", AbvIbuBeer$Style, fixed = TRUE)] = "Other"
+AbvIbuBeer
+
+#TODO: Figure out how to change any style containing "IPA" to type "IPA"
+#AbvIbuBeer$Style[grepl("IPA", AbvIbuBeer$Style, fixed = TRUE)] = "IPA"
+#AbvIbuBeer
+
 # Change any beer style that contains the word 'Ale' to 'other' except for 'American IPA'
-AbvIbuBeer$Style[AbvIbuBeer$Style != "American IPA" & grepl("Ale", AbvIbuBeer$Style, fixed = TRUE)] = "Other"
+#AbvIbuBeer$Style[AbvIbuBeer$Style != "American IPA" & grepl("Ale", AbvIbuBeer$Style, fixed = TRUE)] = "Other"
+
 # Only keep beers with style 'American IPA' or 'Other'
 AbvIbuBeer = AbvIbuBeer %>% filter(Style == "American IPA" | Style == "Other")
+
 # Drop all levels except for 'American IPA' and 'Other'
 AbvIbuBeer$Style = droplevels(AbvIbuBeer$Style)
 
 AbvIbuBeer
 
+# Model relationship between ABV and IBU with knn
 maxKvalue = 100
 accuracyVector = c(maxKvalue)
 
@@ -254,4 +279,11 @@ accuracyVector
 
 plot(seq(1, maxKvalue, 1), accuracyVector, type = "l", xlab = "K value", ylab = "accuracy", main = "accuracy for k values")
 
+```
+
+```{r}
+# The mean beer
+
+# Name: "Average Beer"
+# Calculate the mean ABV/IBU and the mode for ounces/style/state and assign it to the "Average Beer"
 ```
