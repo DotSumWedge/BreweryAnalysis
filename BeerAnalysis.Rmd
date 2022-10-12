@@ -112,6 +112,7 @@ plot_usmap(regions = "states") + labs(title = "U.S States")
 ```{r}
 # Show a map of the US to show how many breweries are in each state with plotly
 library(plotly)
+library(scico)
 
 g = list(scope = 'usa')
 
@@ -137,7 +138,7 @@ ggplot(map_data1, aes(map_id = State)) +
   expand_limits(x = states_map$long, y = states_map$lat) +
   labs(title = "Count of Breweries in the US")+ 
   ggthemes::theme_map() +
-  scico::scale_fill_scico(palette = "lajolla")
+  scico::scale_fill_scico(palette = "berlin")
 
 ```
 
@@ -207,17 +208,17 @@ ggplotly(barPlotABV)
 
 ```{r}
 # Scatter plot between IBU and ABV
-mergedBeerData %>% filter(!is.na(ABV) & !is.na(IBU)) %>% ggplot(aes(x=ABV, y=IBU)) + 
+scatterPlotIBUvsABV = mergedBeerData %>% filter(!is.na(ABV) & !is.na(IBU)) %>% ggplot(aes(x=ABV, y=IBU)) + 
   geom_point(position = "jitter") + 
   geom_smooth(method = "loess", se = F) + 
   labs(title = "Relationship between ABV and IBU", 
        y = "IBU", 
        x = "ABV")
 
-plot(scatterPlotIBUvsABV)
+#plot(scatterPlotIBUvsABV)
 #ggplotly(scatterPlotIBUvsABV)
-ggMarginal(scatterPlotIBUvsABV, type = "histogram")
-ggMarginal(scatterPlotIBUvsABV, type = "boxplot")
+#ggMarginal(scatterPlotIBUvsABV, type = "histogram")
+#ggMarginal(scatterPlotIBUvsABV, type = "boxplot")
 ggMarginal(scatterPlotIBUvsABV)
 ```
 
