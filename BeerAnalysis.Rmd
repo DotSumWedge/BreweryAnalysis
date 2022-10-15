@@ -256,6 +256,8 @@ AbvIbuBeer$Style = as.factor(AbvIbuBeer$Style)
 # Drop all levels except for 'IPA' and 'Other'
 AbvIbuBeer$Style = droplevels(AbvIbuBeer$Style)
 
+table(AbvIbuBeer$Style)
+
 # Model relationship between ABV and IBU with knn
 maxKvalue = 100
 accuracyVector = c(maxKvalue)
@@ -269,8 +271,15 @@ higestAccuracyKValue = which.max(accuracyVector)
 
 higestAccuracyKValue
 accuracyVector
+```
+
+```{r}
 
 plot(seq(1, maxKvalue, 1), accuracyVector, type = "l", xlab = "K value", ylab = "accuracy", main = "accuracy for k values")
+
+AbvIbuBeer %>% ggplot(aes(x = ABV, y = IBU, color = Style)) + 
+  geom_jitter() +
+  labs(title="IBU vs ABV for IPA's and Other Ales")
 
 ```
 
