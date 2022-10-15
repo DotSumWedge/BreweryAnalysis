@@ -242,26 +242,19 @@ uniqueStyles
 
 # Only keep beers with a Style, ABV and IBU
 AbvIbuBeer = mergedBeerData %>% filter(!is.na(ABV) & !is.na(IBU) & !is.na(Style))
+# Set the style column to numeric to more easily manipulate the values
+AbvIbuBeer$Style = as.character(AbvIbuBeer$Style)
 # Keep only beers with a style containing string "IPA" or "Ale"
 AbvIbuBeer = AbvIbuBeer[str_detect(AbvIbuBeer$Style, "IPA|Ale"),]
 # If a syle doesn't contain the "IPA" but does contain "Ale" then change style to "Other"
 AbvIbuBeer$Style[AbvIbuBeer$Style != grepl("IPA", AbvIbuBeer$Style, fixed = TRUE) & grepl("Ale", AbvIbuBeer$Style, fixed = TRUE)] = "Other"
-AbvIbuBeer
-
-#TODO: Figure out how to change any style containing "IPA" to type "IPA"
-#AbvIbuBeer$Style[grepl("IPA", AbvIbuBeer$Style, fixed = TRUE)] = "IPA"
-#AbvIbuBeer
-
-# Change any beer style that contains the word 'Ale' to 'other' except for 'American IPA'
-#AbvIbuBeer$Style[AbvIbuBeer$Style != "American IPA" & grepl("Ale", AbvIbuBeer$Style, fixed = TRUE)] = "Other"
-
-# Only keep beers with style 'American IPA' or 'Other'
-AbvIbuBeer = AbvIbuBeer %>% filter(Style == "American IPA" | Style == "Other")
-
-# Drop all levels except for 'American IPA' and 'Other'
+# Figure out how to change any style containing "IPA" to type "IPA"
+AbvIbuBeer$Style[grepl("IPA", AbvIbuBeer$Style, fixed = TRUE)] = "IPA"
+# Only keep beers with style 'IPA' or 'Other'
+AbvIbuBeer = AbvIbuBeer %>% filter(Style == "IPA" | Style == "Other")
+AbvIbuBeer$Style = as.factor(AbvIbuBeer$Style)
+# Drop all levels except for 'IPA' and 'Other'
 AbvIbuBeer$Style = droplevels(AbvIbuBeer$Style)
-
-AbvIbuBeer
 
 # Model relationship between ABV and IBU with knn
 maxKvalue = 100
@@ -285,5 +278,5 @@ plot(seq(1, maxKvalue, 1), accuracyVector, type = "l", xlab = "K value", ylab = 
 # The mean beer
 
 # Name: "Average Beer"
-# Calculate the mean ABV/IBU and the mode for ounces/style/state and assign it to the "Average Beer"
+# Calculate the mean ABV/IBU and the mode for ounces/style/ and assign it to the "Average Beer"
 ```
