@@ -21,6 +21,7 @@ library(ggExtra)
 library(scales)
 library(scico)
 library(stringr)
+library(naniar)
 ```
 
 ```{r}
@@ -56,8 +57,6 @@ BeerData
 
 
 ```{r}
-library(naniar)
-
 # Manually add in missing data for beers for question/item #3
 # Parsing through the data, we can see that a large amount of information from the IBV and ABV values of beer are missing. 
 # While it is possible to hand-fill out values for both, counting the total number of missing values over both groups add up to over 1000 missing values.
@@ -114,9 +113,6 @@ BreweriesData %>% ggplot(aes(x=fct_infreq(State))) +
 ```{r}
 # Show a map of the US to show how many breweries are in each state with plotly for question #1
 # The coastal states tend to have more breweries than inland states. States know to have high populations tend to have more breweries.
-
-library(plotly)
-library(scico)
 
 g = list(scope = 'usa')
 
