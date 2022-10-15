@@ -288,4 +288,15 @@ AbvIbuBeer %>% ggplot(aes(x = ABV, y = IBU, color = Style)) +
 
 # Name: "Average Beer"
 # Calculate the mean ABV/IBU and the mode for ounces/style/ and assign it to the "Average Beer"
+ABVBeer = mergedBeerData %>% filter(!is.na(ABV))
+IBUBeer = mergedBeerData %>% filter(!is.na(IBU))
+StyleBeer = mergedBeerData %>% filter(!is.na(Style))
+
+# with a count of 384 the American IPA is the most common style of beer
+# most common ounces is 12
+"Mean ABV:"
+mean(ABVBeer$ABV)
+"Mean IBU:"
+mean(IBUBeer$IBU)
+
 ```
