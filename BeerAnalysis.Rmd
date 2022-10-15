@@ -59,6 +59,13 @@ BeerData
 library(naniar)
 
 # Manually add in missing data for beers for question/item #3
+# Parsing through the data, we can see that a large amount of information from the IBV and ABV values of beer are missing. 
+# While it is possible to hand-fill out values for both, counting the total number of missing values over both groups add up to over 1000 missing values.
+# For the most part, we can ignore the missing data, but we cannot prove that the missing data is truly random. 
+# While we can perform an analysis on the data, we must be cautious as to the bias the exclusion of missing data could apply to our results. 
+
+
+
 # After googling various beers without IBU's and looking for the missing value it seems like many are hard to find 
 BeerData[BeerData$Name == "Lee Hill Series Vol. 5 - Belgian Style Quadrupel Ale",]$IBU = 35
 BeerData[BeerData$Name == "Pub Beer",]$IBU = 18
@@ -79,6 +86,8 @@ tail(mergedBeerData, 6)
 
 ```{r}
 # Find the beer with the largest ABV and IBU and return those row for question #5
+# The beer with the highest ABV is the Lee Hill Series Vol. 5 – Belgian Style Quadrupel Ale at 12.8% ABV from the state of Colorado
+# The beer with the highest IBU is the Bitter Bitch Imperial IPA with an ABU of 138 from Oregon
 
 "Highest ABV:"
 max(mergedBeerData$ABV, na.rm = TRUE)
@@ -91,6 +100,7 @@ mergedBeerData[which.max(mergedBeerData$IBU),]
 
 ```{r}
 # create histogram of the number of breweries in each state for question #1
+# Colorado has the most breweries followed by California
 
 BreweriesData %>% ggplot(aes(x=fct_infreq(State))) + 
   geom_bar(stat = "count") + 
@@ -102,16 +112,9 @@ BreweriesData %>% ggplot(aes(x=fct_infreq(State))) +
 ```
 
 ```{r}
-# Show a map of the US to show how many breweries are in each state with usmap and ggplot2
-library(usmap)
-library(ggplot2)
-
-
-plot_usmap(regions = "states") + labs(title = "U.S States")
-```
-
-```{r}
 # Show a map of the US to show how many breweries are in each state with plotly for question #1
+# The coastal states tend to have more breweries than inland states. States know to have high populations tend to have more breweries.
+
 library(plotly)
 library(scico)
 
@@ -145,6 +148,8 @@ ggplot(map_data1, aes(map_id = State)) +
 
 ```{r}
 # Compute the median alcohol content and international bitterness unit for each state then plot with a bar chart for question number 4
+# States with a higher number of breweries tend to be towards the middle of the rankings for ABV and IBU.
+# D.C has the highest median ABV and Maine has the highest IBU
 
 stateMedianABV = mergedBeerData %>% filter(!is.na(ABV)) %>% group_by(State) %>% summarise(Median = median(ABV)) %>% arrange(desc(Median))
 stateMedianIBU = mergedBeerData %>% filter(!is.na(IBU)) %>% group_by(State) %>% summarise(Median = median(IBU)) %>% arrange(desc(Median))
@@ -180,11 +185,13 @@ stateMedianIBU %>% ggplot(aes(x = reorder(State, -Median), y = Median)) +
 
 ```{r}
 # Summary statistics for ABV variable for question #6
+# The mean ABV is higher than the median ABV. ABV ranges from 1 to 12.8 percent
 summary(mergedBeerData %>% filter(!is.na(ABV)))
 ```
 
 ```{r}
 # Boxplot of ABV  for question #6
+# This shows a right skew of the ABV data
 scatterPlotABV = ggplot(data = mergedBeerData %>% filter(!is.na(ABV)), aes(x=ABV)) + 
   geom_boxplot() +
   ylim(-1,1) +
@@ -196,7 +203,8 @@ ggplotly(scatterPlotABV)
 ```
 
 ```{r}
-# Distribution of the ABV variable  for question #6
+# Distribution of the ABV variable  for question #
+# This shows a right skew of the ABV data
 barPlotABV <- ggplot(data = mergedBeerData %>% filter(!is.na(ABV)), aes(x=ABV)) +
   geom_bar(stat = "count") + 
   labs(title="Distribution of ABV", 
@@ -209,6 +217,10 @@ ggplotly(barPlotABV)
 
 ```{r}
 # Scatter plot between IBU and ABV for question #7
+# There is a plausible relationship between the ABV and IBU. 
+# While ABV values are low we see a general trend of low IBUs, and on the flipside, when ABV values are high, we see a corresponding trend of high IBUs. 
+# Naturally, there are outliers to this data, which are very likely contributing to the secondary curve in the graph and as previously mentioned, but generally this is a very plausible relationship. 
+
 scatterPlotIBUvsABV = mergedBeerData %>% filter(!is.na(ABV) & !is.na(IBU)) %>% ggplot(aes(x=ABV, y=IBU)) + 
   geom_point(position = "jitter") + 
   geom_smooth(method = "loess", se = F) + 
@@ -227,6 +239,7 @@ ggMarginal(scatterPlotIBUvsABV)
 
 ```{r}
 # Get list of all unique styles of beers and the number of beers of each style
+# For question/item 8 and 9
 
 # Only keep beers with a Style, ABV and IBU
 uniqueStyles = mergedBeerData %>% filter(!is.na(Style))
@@ -239,6 +252,7 @@ uniqueStyles
 
 ```{r}
 # Prepare data for knn modeling to predict style based off of ABV and IBU for question #8
+# We can see that a K value of 6 yields the best accuracy at % 86.15960
 
 # Only keep beers with a Style, ABV and IBU
 AbvIbuBeer = mergedBeerData %>% filter(!is.na(ABV) & !is.na(IBU) & !is.na(Style))
@@ -285,13 +299,12 @@ AbvIbuBeer %>% ggplot(aes(x = ABV, y = IBU, color = Style)) +
 
 ```{r}
 # Question #9
-# The mean beer
+# The mean beer. Find the mean ABV, IBU, most common number of ounces, and most common style of beer
 
 # Name: "Average Beer"
-# Calculate the mean ABV/IBU and the mode for ounces/style/ and assign it to the "Average Beer"
+# Calculate the mean ABV/IBU
 ABVBeer = mergedBeerData %>% filter(!is.na(ABV))
 IBUBeer = mergedBeerData %>% filter(!is.na(IBU))
-StyleBeer = mergedBeerData %>% filter(!is.na(Style))
 
 # with a count of 384 the American IPA is the most common style of beer
 # most common ounces is 12
