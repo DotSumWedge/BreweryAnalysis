@@ -27,9 +27,6 @@ library(naniar)
 ```{r}
 BeerData = data.frame(read.csv("~/SMU/Term 1/Doing Data Science/MSDS_6306_Doing-Data-Science-Master/Unit 8 and 9 Case Study 1/Beers.csv"))
 BreweriesData = data.frame(read.csv("~/SMU/Term 1/Doing Data Science/MSDS_6306_Doing-Data-Science-Master/Unit 8 and 9 Case Study 1/Breweries.csv"))
-
-BeerData
-BreweriesData
 ```
 
 ```{r}
@@ -51,7 +48,6 @@ BeerData %>% count(Name) %>% ungroup() %>% arrange(desc(n))
 # Remove beers with the same name, removes 240 unwanted duplicates
 BeerData = BeerData %>% group_by(Name) %>% filter(!duplicated(Name))
 
-BeerData
 ```
 
 
@@ -78,7 +74,6 @@ BeerData[BeerData$Name == "Sinister",]$IBU = 30
 names(BreweriesData)[1] = "Brewery_id"
 mergedBeerData = merge(BeerData, BreweriesData, by = "Brewery_id")
 
-mergedBeerData
 head(mergedBeerData, 6)
 tail(mergedBeerData, 6)
 ```
