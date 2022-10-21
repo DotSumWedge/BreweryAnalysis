@@ -308,4 +308,9 @@ mean(ABVBeer$ABV)
 "Mean IBU:"
 mean(IBUBeer$IBU)
 
+# We could name the most "average" beer in the dataset:
+
+avgBeer = mergedBeerData %>% filter(IBU == 42 & ABV == 0.059)
+avgBeer
+
 ```
