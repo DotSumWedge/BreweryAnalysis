@@ -26,6 +26,7 @@ library(naniar)
 
 ```{r}
 BeerData = data.frame(read.csv("~/SMU/Term 1/Doing Data Science/MSDS_6306_Doing-Data-Science-Master/Unit 8 and 9 Case Study 1/Beers.csv"))
+stock_data = BeerData #this is for the gg_miss_var function
 BreweriesData = data.frame(read.csv("~/SMU/Term 1/Doing Data Science/MSDS_6306_Doing-Data-Science-Master/Unit 8 and 9 Case Study 1/Breweries.csv"))
 ```
 
@@ -67,6 +68,9 @@ BeerData[BeerData$Name == "Pub Beer",]$IBU = 18
 BeerData[BeerData$Name == "Sinister",]$IBU = 30
 
 #gg_miss_var(BeerData) Did not work as intended, might use to visualize missing values, might not be necessary
+
+gg_miss_var(stock_data)
+
 ```
 
 ```{r}
@@ -190,7 +194,7 @@ scatterPlotABV = ggplot(data = mergedBeerData %>% filter(!is.na(ABV)), aes(x=ABV
   theme(axis.text.y = element_blank(), axis.ticks.y = element_blank())
 
 plot(scatterPlotABV)
-ggplotly(scatterPlotABV)
+#ggplotly(scatterPlotABV)
 ```
 
 ```{r}
