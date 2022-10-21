@@ -44,7 +44,7 @@ BeerData$Name = str_remove(BeerData$Name, "([:space:]|)\\(\\d\\d\\d\\d\\)")
 BeerData$Name = str_trim(BeerData$Name)
 
 #Shows how many duplicates of each beer, 240 unwanted duplicates in total
-BeerData %>% count(Name) %>% ungroup() %>% arrange(desc(n))
+#BeerData %>% count(Name) %>% ungroup() %>% arrange(desc(n))
 
 # Remove beers with the same name, removes 240 unwanted duplicates
 BeerData = BeerData %>% group_by(Name) %>% filter(!duplicated(Name))
@@ -155,8 +155,9 @@ stateNumberOfBeersIBU = mergedBeerData %>% filter(!is.na(IBU)) %>% group_by(Stat
 stateMedianABV = merge(stateMedianABV, stateNumberOfBeersABV, by = "State")
 stateMedianIBU = merge(stateMedianIBU, stateNumberOfBeersIBU, by = "State")
 
-stateMedianABV
-stateMedianIBU
+#print out median ABV and/or IBU by state
+#stateMedianABV
+#stateMedianIBU
 
 stateMedianABV %>% ggplot(aes(x = reorder(State, -Median), y = Median)) +
   geom_bar(stat = "identity", aes(fill = n)) +
