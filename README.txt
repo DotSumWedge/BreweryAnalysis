@@ -4,7 +4,7 @@ Authors: Derek Rogers and Abhay Sharma
 
 Introduction:
 
-This midterm project expores the data in Beers.csv and Breweries.csv. It answer the questions/items:
+This midterm project explores the data in Beers.csv and Breweries.csv. It answers the questions/items:
 
 1.	How many breweries are present in each state?
 2.	Merge beer data with the breweries data. Print the first 6 observations and the last six observations to check the merged file.  (RMD only, this does not need to be included in the presentation or the deck.)
@@ -20,3 +20,13 @@ Requirements:
 
 To build and run this project open the BeerAnalysis.Rmd file in R studio and change the file paths for the Beers.csv and Breweries.csv near the top of the file.
 Make sure all libraries are imported and then run all chunks of code.
+
+Files Included: 
+
+BeerAnalysis.Rmd - R markdown file containing analysis on Beer/Brewery datasets
+BeerAnalysis.html - knitr html output of the R Markdown File
+BeerAnalysisPresentation.pptx - Powerpoint deck containing presentation on the Beer analysis
+
+Beers.csv - Beer datafile
+Breweries.csv - Breweries datafile
+
